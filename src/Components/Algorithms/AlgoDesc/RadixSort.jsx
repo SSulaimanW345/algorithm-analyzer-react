@@ -1,4 +1,4 @@
-const MergeSort = () => {
+const RadixSort = () => {
   return (
     <div>
       <div className="d-flex">
@@ -15,10 +15,9 @@ const MergeSort = () => {
         </div>
         <div className="p-2 col-lg-6">
           <ul className="text-left">
-            <li>Worst case: O(n * log(n))</li>
-
-            <li>Best Case : O(n * log(n))</li>
-            <li>Average Case : O(n * log(n))</li>
+            <li>Worst case: O(n+k)</li>
+            <li>Best Case: O(n+k)</li>
+            <li>Average Case: O(n+k)</li>
           </ul>
         </div>
       </div>
@@ -26,4 +25,4 @@ const MergeSort = () => {
   );
 };
 
-export default MergeSort;
+export default RadixSort;

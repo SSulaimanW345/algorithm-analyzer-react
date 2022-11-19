@@ -1,4 +1,4 @@
-const BubbleSort = () => {
+const InsertionSort = () => {
   return (
     <div>
       <div className="d-flex">
@@ -17,14 +17,12 @@ const BubbleSort = () => {
           <ul className="text-left">
             <li>Worst case: O(n^2)</li>
             <p>
-              Suppose, an array is in ascending order, and you want to sort it
-              in descending order. In this case, worst case complexity occurs.
+              If we want to sort in ascending order and the array is in
+              descending order then the worst case occurs.
             </p>
             <li>Best Case : O(n)</li>
             <p>
-              When the array is already sorted, the outer loop runs for n number
-              of times whereas the inner loop does not run at all. So, there are
-              only n number of comparisons. Thus, complexity is linear.
+              If the array is already sorted, then there is no need for sorting.
             </p>
             <li>Average Case : O(n^2)</li>
             <p>
@@ -38,4 +36,4 @@ const BubbleSort = () => {
   );
 };
 
-export default BubbleSort;
+export default InsertionSort;

@@ -1,10 +1,19 @@
 .array-container {
-    
-    /* top: 100px; */
-  }
-  
+   min-height: 400px;
+   padding:10px;
+
+}
+.array-sub{
+  display: inline-block;
+  position: relative;
+}
+.array-top{
+  /* position: absolute; */
+  top:0;
+}
   .array-bar {
-    width: 10px;
+    position: relative;
+    width: 25px;
     display: inline-block;
     margin: 0 1px;
   }

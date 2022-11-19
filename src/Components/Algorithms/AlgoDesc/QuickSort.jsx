@@ -1,7 +1,6 @@
 const QuickSort = () => {
   return (
     <div>
-      <h2 className="p-3 text-left">Quick Sort Algorithm</h2>
       <div className="d-flex">
         <div className="p-2 col-lg-6">
           <p>
@@ -15,9 +14,19 @@ const QuickSort = () => {
           </p>
         </div>
         <div className="p-2 col-lg-6">
-          <ul>
+          <ul className="text-left">
             <li>Worst case: O(n^2)</li>
-            <li>Worst case: O(n^2)</li>
+            <p>
+              It occurs when the pivot element picked is either the greatest or
+              the smallest element.
+            </p>
+            <li>Best Case : O(n*log n)</li>
+            <p>
+              It occurs when the pivot element is always the middle element or
+              near to the middle element.
+            </p>
+            <li>Average Case : O(n*log n)</li>
+            <p>It occurs when the above conditions do not occur.</p>
           </ul>
         </div>
       </div>

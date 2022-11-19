@@ -7,7 +7,7 @@ import React, { useState, Component } from 'react';
 const NUMBER_OF_ARRAY_BARS = 50;
 function App() {
   //var algorithm = "none";
-  const [algorithm, setAlgorithm] = useState('');
+  const [algorithm, setAlgorithm] = useState('MergeSort');
   const [Numberarray, setNumberarray] = useState('');
   const changeAlgorithmtype = (value) => {
     setAlgorithm(value);

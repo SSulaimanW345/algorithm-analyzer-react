@@ -77,25 +77,25 @@ export function getBubbleSortAnimations(array) {
 }
 export function getInsertionSortAnimations(array) {
     const animations = [];
-    for (let i = 0; i < array.length;i++){
+    for (let i = 1; i < array.length;i++){
         let key = array[i];
         let j = i - 1;
         if (j >= 0 && array[j] < key) {
-            animations.push([i, j]);
-            animations.push([i, j]);
-            animations.push([i, array[i]]);
+            animations.push([i, j,key]);
+            animations.push([i, j,key]);
+            animations.push([i, array[i],j,0]);
         }
         while (j >= 0 && array[j] > key) {
-            animations.push([i, j]);
-            animations.push([i, j]);
+            animations.push([i, j,key]);
+            animations.push([i, j,key]);
             array[j + 1] = array[j];
-            animations.push([j+1,array[j]]);
+            animations.push([j+1,array[j],key,1]);
             j--;
         }
         array[j + 1] = key;
-        animations.push([i, j+1]);
-        animations.push([i, j+1]);
-        animations.push([j+1,key]);
+        animations.push([i, j+1,-1]);
+        animations.push([i, j+1,-1]);
+        animations.push([j+1,key,i,2]);
     }
     return animations;
 }
@@ -274,12 +274,12 @@ export function getCountingSortAnimations(array) {
   const animations = [];
   const max = array.reduce((a, b) => Math.max(a, b), -Infinity);
   console.log(max);
-  let countarr =  new Array(max).fill(0);
-  let output = new Array(max).fill(0);;
+  let countarr =  new Array(max+1).fill(0);
+  let output = new Array(max+1).fill(0);;
   const range = array.length;
   for (let i = 0; i < range;i++) { 
     countarr[array[i]]+=1;
-    console.log(countarr);
+    //console.log(countarr);
     animations.push([i]);
     animations.push([i]);
   }
@@ -289,11 +289,14 @@ export function getCountingSortAnimations(array) {
   }
   for (let i = range-1; i>=0; i--) { 
     output[countarr[array[i]] - 1] = array[i];
+    animations.push([countarr[array[i]] - 1,array[i],i]);
     countarr[array[i]]--;
+    
   }
   for (let i = 0; i<range; i++) {
-    array[i] = output[i];animations.push([i,output[i]]);
+    array[i] = output[i];//animations.push([i,output[i]]);
   }
+  console.log(output);
 
   return animations;
 }

@@ -1,4 +1,4 @@
-const BubbleSort = () => {
+const BucketSort = () => {
   return (
     <div>
       <div className="d-flex">
@@ -17,19 +17,20 @@ const BubbleSort = () => {
           <ul className="text-left">
             <li>Worst case: O(n^2)</li>
             <p>
-              Suppose, an array is in ascending order, and you want to sort it
-              in descending order. In this case, worst case complexity occurs.
+              When there are elements of close range in the array, they are
+              likely to be placed in the same bucket. This may result in some
+              buckets having more number of elements than others.
             </p>
-            <li>Best Case : O(n)</li>
+            <li>Best Case : O(n+k)</li>
             <p>
-              When the array is already sorted, the outer loop runs for n number
-              of times whereas the inner loop does not run at all. So, there are
-              only n number of comparisons. Thus, complexity is linear.
+              It occurs when the elements are uniformly distributed in the
+              buckets with a nearly equal number of elements in each bucket.
             </p>
-            <li>Average Case : O(n^2)</li>
+            <li>Average Case : O(n)</li>
             <p>
-              It occurs when the elements of the array are in jumbled order
-              (neither ascending nor descending).
+              It occurs when the elements are distributed randomly in the array.
+              Even if the elements are not distributed uniformly, bucket sort
+              runs in linear time.
             </p>
           </ul>
         </div>
@@ -38,4 +39,4 @@ const BubbleSort = () => {
   );
 };
 
-export default BubbleSort;
+export default BucketSort;

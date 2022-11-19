@@ -8,7 +8,11 @@ const Header = (props) => {
     { title: "QuickSort" },
     { title: "InsertionSort" },
     { title: "BubbleSort" },
-    { title: "SelectionSort" },
+    // { title: "SelectionSort" },
+    { title: "HeapSort" },
+    { title: "BucketSort" },
+    { title: "RadixSort" },
+    { title: "CountSort" },
   ];
   const onSelecthandler = (algotype) => {
     console.log(algotype);
