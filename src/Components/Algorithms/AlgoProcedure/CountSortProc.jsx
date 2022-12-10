@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "./allProc.css";
 
 const PRIMARY_COLOR = "turquoise";
 // This is the color of array bars that are being compared throughout the animations.
@@ -6,6 +7,14 @@ const SECONDARY_COLOR = "red";
 const CountSortProc = (props) => {
   return (
     <div>
+      <div>
+        <p>count array of length n intialized</p>
+        <p>for i = 0 to n do: count[key of(A[i]) in pass j]++</p>
+        <p>for k = 1 to 10: count[k] = count[k] + count[k-1]</p>
+        <p>for i = n-1 downto 0 do</p>
+        <p>result[ count[key of(A[i])] ] = A[j]</p>
+        <p>count[key of(A[i])]--</p>
+      </div>
       <div>
         {props.stepData == "" && <div>click play button to start</div>}
         {props.stepData != "" &&
@@ -35,22 +44,6 @@ const CountSortProc = (props) => {
             </p>
           </div>
         )}
-      </div>
-      <div>
-        count array of length n intialized
-        <br />
-        pass=1
-      </div>
-      <div>
-        for i = 0 to n do <br /> count[key of(A[i]) in pass j]++
-      </div>
-      <div>
-        for k = 1 to 10 do <br /> count[k] = count[k] + count[k-1]
-      </div>
-      <div>
-        for i = n-1 downto 0 do <br /> result[ count[key of(A[i])] ] = A[j]
-        <br />
-        count[key of(A[i])]--
       </div>
     </div>
   );

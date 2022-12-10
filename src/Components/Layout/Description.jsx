@@ -2,13 +2,15 @@ import { useEffect } from "react";
 import { useState } from "react";
 import BubbleSort from "../Algorithms/AlgoDesc/BubbleSort";
 import BucketSort from "../Algorithms/AlgoDesc/BucketSort";
+import CountElements from "../Algorithms/AlgoDesc/CountElements";
 import CountSort from "../Algorithms/AlgoDesc/CountSort";
 import HeapSort from "../Algorithms/AlgoDesc/HeapSort";
 import InsertionSort from "../Algorithms/AlgoDesc/InsertionSort";
 import MergeSort from "../Algorithms/AlgoDesc/MergeSort";
+import ModifiedQuickSort from "../Algorithms/AlgoDesc/ModifiedQuickSort";
 import QuickSort from "../Algorithms/AlgoDesc/QuickSort";
 import RadixSort from "../Algorithms/AlgoDesc/RadixSort";
-
+import "./Description.css";
 const Description = (props) => {
   const [algodesc, setAlgodesc] = useState(props.type);
   const [Bubblesortvisible, setBubblesortvisible] = useState(false);
@@ -18,6 +20,9 @@ const Description = (props) => {
   const [Countsortvisible, setCountsortvisible] = useState(false);
   const [Bucketsortvisible, setBucketsortvisible] = useState(false);
   const [Insertionsortvisible, setInsertionsortvisible] = useState(false);
+  const [ModifiedQuicksortvisible, setModifiedQuicksortvisible] =
+    useState(false);
+  const [Countelementsvisible, setCountelementsvisible] = useState(false);
   const [Heapsortvisible, setHeapsortvisible] = useState(false);
   useEffect(() => {
     setAlgodesc(props.type);
@@ -47,9 +52,15 @@ const Description = (props) => {
     algodesc === "InsertionSort"
       ? setInsertionsortvisible(true)
       : setInsertionsortvisible(false);
+    algodesc === "ModifiedQuickSort"
+      ? setModifiedQuicksortvisible(true)
+      : setModifiedQuicksortvisible(false);
+    algodesc === "CountElements"
+      ? setCountelementsvisible(true)
+      : setCountelementsvisible(false);
   }, [algodesc]);
   return (
-    <div>
+    <div id="DescriptionContainer">
       {Bubblesortvisible && <BubbleSort />}
       {Mergesortvisible && <MergeSort />}
       {Quicksortvisible && <QuickSort />}
@@ -58,6 +69,8 @@ const Description = (props) => {
       {Insertionsortvisible && <InsertionSort />}
       {Countsortvisible && <CountSort />}
       {Heapsortvisible && <HeapSort />}
+      {Countelementsvisible && <CountElements />}
+      {ModifiedQuicksortvisible && <ModifiedQuickSort />}
     </div>
   );
 };

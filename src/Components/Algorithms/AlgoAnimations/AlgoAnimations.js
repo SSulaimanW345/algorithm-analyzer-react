@@ -120,25 +120,25 @@ function quicksortPartition(array,low,high,animations) {
         
         if (array[j] < pivot) {
             i++;
-            animations.push([j, high,i]);
-            animations.push([j, high,i]);
+            animations.push([j, high,i,high]);
+            animations.push([j, high,i,high]);
             let temp = array[i];
             array[i] = array[j];
             array[j] = temp;
-            animations.push([i, array[i], j, array[j]]);
+            animations.push([i, array[i], j, array[j],high]);
         }
         else {
-            animations.push([j, high,-1]);
-            animations.push([j, high,-1]);
-            animations.push([high,array[high],j,array[j]]);
+            animations.push([j, high,-1,high]);
+            animations.push([j, high,-1,high]);
+            animations.push([high,array[high],j,array[j],high]);
         }
     }
     let temp = array[i + 1];
     array[i + 1] = array[high];
     array[high] = temp;
-    animations.push([high, high,i+1]);
-    animations.push([high, high,i+1]);
-    animations.push([i+1,array[i+1],high,array[high]]);
+    animations.push([high, high,i+1,high]);
+    animations.push([high, high,i+1,high]);
+    animations.push([i+1,array[i+1],high,array[high],high]);
     return (i+1);
 }
 
@@ -191,34 +191,38 @@ export function getRadixSortAnimations(array) {
   const maxNum = array.reduce((a, b) => Math.max(a, b), -Infinity);
   //console.log(maxNum);
   //animations.push([maxNum]);
+  var passNum = 1;
   for (let pass = 1; Math.floor(maxNum / pass) > 0; pass = pass * 10)
   {
     //console.log(pass);
     console.log(array);
-    countSortRadix(array, array.length, pass, animations);
+    countSortRadix(array, array.length, pass, animations, passNum);
+    passNum++;
   }
   
   return animations;
 }
-function countSortRadix(arr, n,pass,animations) {
+function countSortRadix(arr, n,pass,animations,passNum) {
   let output =  new Array(n).fill(0); // output array
   let countarr = new Array(10).fill(0);
   //console.log(animations);
   for (let i = 0; i < n; i++) {
     console.log(Math.floor((arr[i] / pass)) % 10);
-    countarr[Math.floor((arr[i] / pass)) % 10]++; animations.push([i]);animations.push([i]);
+    countarr[Math.floor((arr[i] / pass)) % 10]++; animations.push([i,passNum,pass]);animations.push([i,passNum,pass]);
   }
   for (let i = 1; i < 10; i++) {
     countarr[i] += countarr[i - 1];
   }
 
   for (let i = n - 1; i >= 0; i--) {
-      output[countarr[Math.floor((arr[i] / pass)) % 10] - 1] = arr[i];
+    output[countarr[Math.floor((arr[i] / pass)) % 10] - 1] = arr[i];
+      animations.push([countarr[Math.floor((arr[i] / pass)) % 10] - 1,arr[i],i,passNum,pass]);
       countarr[Math.floor((arr[i] / pass)) % 10]--;
   }
 
   for (let i = 0; i < n; i++) {
-    arr[i] = output[i]; animations.push([i,output[i]]);
+    arr[i] = output[i];
+    //animations.push([i, output[i], passNum]);
   }
 
   //console.log(arr);
@@ -242,17 +246,19 @@ export function getBucketSortAnimations(array) {
   let i = 0;
   array.forEach(element => {
     Buckets[Math.floor((element - minVal) / bucketSize)].push(element);
-    animations.push([i]);animations.push([i]);
+    animations.push([i,Math.floor((element - minVal) / bucketSize),bucketCount]);animations.push([i,Math.floor((element - minVal) / bucketSize),bucketCount]);
     i++;
   });
   i = 0;
+  var bucketNum = 1;
   Buckets.forEach(function(bucket) {
   	insertionSort(bucket);
   	bucket.forEach(function (element) {
       array.push(element);
-      animations.push([i, element]);
+      animations.push([i, element,bucketCount,bucketNum]);
       i++;
-  	});
+    });
+    bucketNum++;
   });
   return animations;
 }
@@ -299,4 +305,126 @@ export function getCountingSortAnimations(array) {
   console.log(output);
 
   return animations;
+}
+export function getCountElementsAnimations(array, first,second) {
+  const animations = [];
+  const max = array.reduce((a, b) => Math.max(a, b), -Infinity);
+  console.log(max);
+  let countarr =  new Array(max+1).fill(0);
+  let output = new Array(max+1).fill(0);;
+  const range = array.length;
+  for (let i = 0; i < range;i++) { 
+    countarr[array[i]]+=1;
+    //console.log(countarr);
+    animations.push([i]);
+    animations.push([i]);
+  }
+  for (let i = 1; i <= max; i++){
+    countarr[i] += countarr[i - 1];
+    //animations.push([i, i-1]);
+  }
+  for (let i = range-1; i>=0; i--) { 
+    output[countarr[array[i]] - 1] = array[i];
+    animations.push([countarr[array[i]] - 1,array[i],i]);
+    countarr[array[i]]--;
+    
+  }
+  for (let i = 0; i<range; i++) {
+    array[i] = output[i];//animations.push([i,output[i]]);
+  }
+  var countNum = 0;
+  for (let i = 0; i<range; i++) {
+    if (array[i] >= first && array[i] <= second) {
+      countNum++;animations.push([i,countNum]);
+    }
+  }
+  //animations.push([countNum]);
+  console.log(output);
+
+  return animations;
+}
+export function getOptimizedQuickSortAnimations(array) {
+  const animations = [];
+  if (array.length <= 1) return array;
+  Optimizedquicksortarr(array, 0, array.length - 1, animations);
+  
+  return animations;
+}
+function Optimizedquicksortarr(array, low,high,animations) {
+  while (low < high)
+    {
+        // switch to insertion sort if the size is 10 or smaller
+        if (high - low < 10)
+        {
+          OptimizedInsertionsort(array, low, high,animations);
+          break;
+        }
+        else {
+            var pivot = quicksortPartitionOpt(array, low, high,animations);
+ 
+            // tail call optimizations – recur on the smaller subarray
+            if (pivot - low < high - pivot)
+            {
+              Optimizedquicksortarr(array, low, pivot - 1,animations);
+                low = pivot + 1;
+            }
+            else {
+              Optimizedquicksortarr(array, pivot + 1, high,animations);
+                high = pivot - 1;
+            }
+        }
+    }
+
+}
+
+function OptimizedInsertionsort(array,low,n,animations) {
+  for (let i = low + 1; i <= n; i++)
+    {
+      let key = array[i];
+      let j = i - 1;
+      if (j >= 0 && array[j] < key) {
+          animations.push([1,i, j,key]);
+          animations.push([1,i, j,key]);
+          animations.push([1,i, array[i],j,0]);
+      }
+      while (j >= 0 && array[j] > key) {
+          animations.push([1,i, j,key]);
+          animations.push([1,i, j,key]);
+          array[j + 1] = array[j];
+          animations.push([1,j+1,array[j],key,1]);
+          j--;
+      }
+      array[j + 1] = key;
+      animations.push([1,i, j+1,-1]);
+      animations.push([1,i, j+1,-1]);
+      animations.push([1,j+1,key,i,2]);
+    }
+}
+function quicksortPartitionOpt(array,low,high,animations) {
+  let pivot = array[high];
+  let i = low - 1;
+  for (let j = low; j <= high; j++){
+      
+      if (array[j] < pivot) {
+          i++;
+          animations.push([0,j, high,i,high]);
+          animations.push([0,j, high,i,high]);
+          let temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+          animations.push([0,i, array[i], j, array[j],high]);
+      }
+      else {
+          animations.push([0,j, high,-1,high]);
+          animations.push([0,j, high,-1,high]);
+          animations.push([0,high,array[high],j,array[j],high]);
+      }
+  }
+  let temp = array[i + 1];
+  array[i + 1] = array[high];
+  array[high] = temp;
+  animations.push([0,high, high,i+1,high]);
+  animations.push([0,high, high,i+1,high]);
+  animations.push([0,i+1,array[i+1],high,array[high],high]);
+  return (i+1);
 }

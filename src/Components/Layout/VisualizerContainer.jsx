@@ -4,13 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   getBubbleSortAnimations,
   getBucketSortAnimations,
+  getCountElementsAnimations,
   getCountingSortAnimations,
   getHeapSortAnimations,
   getInsertionSortAnimations,
   getMergeSortAnimations,
+  getOptimizedQuickSortAnimations,
   getQuickSortAnimations,
   getRadixSortAnimations,
 } from "../Algorithms/AlgoAnimations/AlgoAnimations.js";
+import Button from "../UI/Button";
 var ANIMATION_SPEED_MS = 150;
 
 // Change this value for the number of bars (value) in the array.
@@ -33,6 +36,7 @@ export default class VisualizerContainer extends React.Component {
       animations: [],
       lastPos: -1,
       play: 0,
+      execTime: 0,
     };
   }
 
@@ -121,6 +125,9 @@ export default class VisualizerContainer extends React.Component {
       else if (this.props.type == "BucketSort") this.bucketSort(1);
       else if (this.props.type == "CountSort") this.countSort(1);
       else if (this.props.type == "HeapSort") this.heapSort(1);
+      else if (this.props.type == "ModifiedQuickSort")
+        this.ModifiedquickSort(1);
+      else if (this.props.type == "CountElements") this.countElements(1);
     }
     // else if (opt == 2) {
     //   if (this.props.type == "BubbleSort") this.bubbleSort(2);
@@ -142,6 +149,8 @@ export default class VisualizerContainer extends React.Component {
     else if (this.props.type == "BucketSort") this.bucketSort(0);
     else if (this.props.type == "CountSort") this.countSort(0);
     else if (this.props.type == "HeapSort") this.heapSort(0);
+    else if (this.props.type == "ModifiedQuickSort") this.ModifiedquickSort(0);
+    else if (this.props.type == "CountElements") this.countElements(0);
   }
   resetProblem() {
     //this.setState({ array: this.state.initialarray });
@@ -237,7 +246,7 @@ export default class VisualizerContainer extends React.Component {
       const arrayBars = document.getElementsByClassName("array-bar");
       const isColorChange = i % 3 !== 2;
       if (isColorChange) {
-        const [barOneIdx, barTwoIdx, barThirdIdx] = animations[i];
+        const [barOneIdx, barTwoIdx, barThirdIdx, pivot] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         const barThirdStyle =
@@ -249,18 +258,171 @@ export default class VisualizerContainer extends React.Component {
           barTwoStyle.backgroundColor = color;
           if (barThirdStyle != -1) barThirdStyle.backgroundColor = colorThird;
           this.updateArray();
+          this.props.invokePropHandler([
+            barOneIdx,
+            barTwoIdx,
+            this.state.array[barOneIdx],
+            this.state.array[barTwoIdx],
+            color,
+            0,
+            this.state.array[pivot],
+            pivot,
+          ]);
           this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
         }, timeDelay * ANIMATION_SPEED_MS);
       } else {
-        const [barOneIdx, newHeight, barTwoIdx, newHeightTwo] = animations[i];
+        const [barOneIdx, newHeight, barTwoIdx, newHeightTwo, pivot] =
+          animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         const barTwoStyle = arrayBars[barTwoIdx].style;
         timeoutId = setTimeout(() => {
           barOneStyle.height = `${newHeight}px`;
           barTwoStyle.height = `${newHeightTwo}px`;
           this.updateArray();
+          this.props.invokePropHandler([
+            barOneIdx,
+            barTwoIdx,
+            this.state.array[barOneIdx],
+            this.state.array[barTwoIdx],
+            barOneStyle.backgroundColor,
+            1,
+            this.state.array[pivot],
+            pivot,
+          ]);
           this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
         }, timeDelay * ANIMATION_SPEED_MS);
+      }
+      timeoutIds.push(timeoutId);
+      timeDelay++;
+    }
+    timeoutId = setTimeout(
+      this.clearTimeoutsCompletion,
+      timeDelay * ANIMATION_SPEED_MS
+    );
+    timeoutIds.push(timeoutId);
+    //this.updateArray();
+    this.setState({ timeoutIds });
+    this.updateArray();
+  }
+  ModifiedquickSort(a) {
+    let animations = [];
+    if (this.state.animations.length == 0) {
+      animations = getOptimizedQuickSortAnimations(this.state.array);
+    }
+    if (animations.length != 0) this.setState({ animations });
+    const timeoutIds = [];
+    let timeDelay = 0;
+    let i = this.state.lastPos + 1;
+    let timeoutId;
+    console.log(i);
+    if (i != 0) animations = this.state.animations;
+    let loopEnd =
+      this.state.lastPos == -1
+        ? animations.length
+        : this.state.animations.length;
+    if (a == 1) loopEnd = i + 1;
+    for (i; i < loopEnd; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      const [firstVar] = animations[i];
+      if (firstVar == 0) {
+        const isColorChange = i % 3 !== 2;
+        if (isColorChange) {
+          const [funcUsed, barOneIdx, barTwoIdx, barThirdIdx, pivot] =
+            animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          const barTwoStyle = arrayBars[barTwoIdx].style;
+          const barThirdStyle =
+            barThirdIdx >= 0 ? arrayBars[barThirdIdx].style : -1;
+          const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+          const colorThird = i % 3 === 0 ? "yellow" : PRIMARY_COLOR;
+          timeoutId = setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+            if (barThirdStyle != -1) barThirdStyle.backgroundColor = colorThird;
+            this.updateArray();
+            this.props.invokePropHandler([
+              funcUsed,
+              barOneIdx,
+              barTwoIdx,
+              this.state.array[barOneIdx],
+              this.state.array[barTwoIdx],
+              color,
+              0,
+              this.state.array[pivot],
+              pivot,
+            ]);
+            this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
+          }, timeDelay * ANIMATION_SPEED_MS);
+        } else {
+          const [
+            funcUsed,
+            barOneIdx,
+            newHeight,
+            barTwoIdx,
+            newHeightTwo,
+            pivot,
+          ] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          const barTwoStyle = arrayBars[barTwoIdx].style;
+          timeoutId = setTimeout(() => {
+            barOneStyle.height = `${newHeight}px`;
+            barTwoStyle.height = `${newHeightTwo}px`;
+            this.updateArray();
+            this.props.invokePropHandler([
+              funcUsed,
+              barOneIdx,
+              barTwoIdx,
+              this.state.array[barOneIdx],
+              this.state.array[barTwoIdx],
+              barOneStyle.backgroundColor,
+              1,
+              this.state.array[pivot],
+              pivot,
+            ]);
+            this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
+          }, timeDelay * ANIMATION_SPEED_MS);
+        }
+      } else {
+        const isColorChange = i % 3 !== 2;
+        if (isColorChange) {
+          const [funcUsed, barOneIdx, barTwoIdx, keyvalue] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          const barTwoStyle = arrayBars[barTwoIdx].style;
+          const color = i % 3 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
+          timeoutId = setTimeout(() => {
+            barOneStyle.backgroundColor = color;
+            barTwoStyle.backgroundColor = color;
+            this.updateArray();
+            this.props.invokePropHandler([
+              funcUsed,
+              0,
+              barOneIdx,
+              barTwoIdx,
+              keyvalue,
+              this.state.array[barTwoIdx],
+              barOneStyle.backgroundColor,
+            ]);
+            this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
+          }, timeDelay * ANIMATION_SPEED_MS);
+        } else {
+          const [funcUsed, barOneIdx, newHeight, key, keyHeight] =
+            animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          timeoutId = setTimeout(() => {
+            barOneStyle.height = `${newHeight}px`;
+            this.updateArray();
+            this.props.invokePropHandler([
+              funcUsed,
+              1,
+              barOneIdx,
+              key,
+              newHeight,
+              key,
+              keyHeight,
+            ]);
+            this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
+          }, timeDelay * ANIMATION_SPEED_MS);
+        }
       }
       timeoutIds.push(timeoutId);
       timeDelay++;
@@ -410,6 +572,93 @@ export default class VisualizerContainer extends React.Component {
     this.setState({ timeoutIds });
     this.updateArray();
   }
+  countElements(a) {
+    let animations = [];
+    let firstNum = 40;
+    let secondNum = 100;
+    if (this.state.animations.length == 0) {
+      animations = getCountElementsAnimations(
+        this.state.array,
+        firstNum,
+        secondNum
+      );
+    }
+    const arrlength = this.state.array.length;
+    if (animations.length != 0) this.setState({ animations });
+    const timeoutIds = [];
+    let timeDelay = 0;
+    let i = this.state.lastPos + 1;
+    let timeoutId;
+    console.log(i);
+    if (i != 0) animations = this.state.animations;
+    let loopEnd =
+      this.state.lastPos == -1
+        ? animations.length
+        : this.state.animations.length;
+    if (a == 1) loopEnd = i + 1;
+    for (i; i < loopEnd; i++) {
+      const arrayBars = document.getElementsByClassName("array-bar");
+      const isColorChange = i < 2 * arrlength;
+      if (isColorChange) {
+        const [barOneIdx] = animations[i];
+        const barOneStyle = arrayBars[barOneIdx].style;
+        //const barTwoStyle = arrayBars[barTwoIdx].style;
+        const color = (i + 1) % 2 === 0 ? PRIMARY_COLOR : SECONDARY_COLOR;
+        timeoutId = setTimeout(() => {
+          barOneStyle.backgroundColor = color;
+          this.props.invokePropHandler([
+            0,
+            barOneIdx,
+            this.state.array[barOneIdx],
+            color,
+          ]);
+          this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
+          //barTwoStyle.backgroundColor = color;
+        }, timeDelay * ANIMATION_SPEED_MS);
+      } else {
+        if (i < 3 * arrlength) {
+          const [barOneIdx, newHeight, prev] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          //const barTwoStyle = arrayBars[barTwoIdx].style;
+          timeoutId = setTimeout(() => {
+            barOneStyle.height = `${newHeight}px`;
+            //barTwoStyle.height = `${newHeight2}px`;
+            this.updateArray();
+            this.props.invokePropHandler([
+              1,
+              barOneIdx,
+              newHeight,
+              prev,
+              barOneStyle.backgroundColor,
+            ]);
+            this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
+          }, timeDelay * ANIMATION_SPEED_MS);
+        } else {
+          const [barOneIdx, count] = animations[i];
+          const barOneStyle = arrayBars[barOneIdx].style;
+          //const barTwoStyle = arrayBars[barTwoIdx].style;
+          timeoutId = setTimeout(() => {
+            //barOneStyle.height = `${newHeight}px`;
+            //barTwoStyle.height = `${newHeight2}px`;
+            barOneStyle.backgroundColor = SECONDARY_COLOR;
+            this.updateArray();
+            this.props.invokePropHandler([2, count, firstNum, secondNum]);
+            this.setState((state, props) => ({ lastPos: state.lastPos }));
+          }, timeDelay * ANIMATION_SPEED_MS);
+        }
+      }
+      timeoutIds.push(timeoutId);
+      timeDelay++;
+    }
+    timeoutId = setTimeout(
+      this.clearTimeoutsCompletion,
+      timeDelay * ANIMATION_SPEED_MS
+    );
+    timeoutIds.push(timeoutId);
+    //this.updateArray();
+    this.setState({ timeoutIds });
+    this.updateArray();
+  }
   radixSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
@@ -441,10 +690,10 @@ export default class VisualizerContainer extends React.Component {
     for (i; i < loopEnd; i++) {
       const arrayBars = document.getElementsByClassName("array-bar");
       let timeoutId;
-      const isColorChange = animations[i].length === 1;
+      const isColorChange = animations[i].length === 3;
 
       if (isColorChange) {
-        const [barOneIdx] = animations[i];
+        const [barOneIdx, pass, place] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         //const barTwoStyle = arrayBars[barTwoIdx].style;
         const color = (i + 2) % 2 === 0 ? SECONDARY_COLOR : PRIMARY_COLOR;
@@ -452,16 +701,34 @@ export default class VisualizerContainer extends React.Component {
         timeoutId = setTimeout(() => {
           barOneStyle.backgroundColor = color;
           //this.updateArray();
+          this.props.invokePropHandler([
+            0,
+            barOneIdx,
+            Math.floor(this.state.array[barOneIdx] / place) % 10,
+            //this.state.array[barOneIdx],
+            color,
+            pass,
+            place,
+          ]);
           this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
           //barTwoStyle.backgroundColor = color;
         }, timeDelay * ANIMATION_SPEED_MS);
       } else {
-        const [barOneIdx, newHeight] = animations[i];
+        const [barOneIdx, newHeight, prev, pass, place] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         //const barTwoStyle = arrayBars[barTwoIdx].style;
         timeoutId = setTimeout(() => {
           barOneStyle.height = `${newHeight}px`;
           this.updateArray();
+          this.props.invokePropHandler([
+            1,
+            barOneIdx,
+            newHeight,
+            prev,
+            barOneStyle.backgroundColor,
+            pass,
+            place,
+          ]);
           this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
           //barTwoStyle.height = `${newHeight2}px`;
         }, timeDelay * ANIMATION_SPEED_MS);
@@ -653,23 +920,39 @@ export default class VisualizerContainer extends React.Component {
       const isColorChange = i < arrlength * 2;
       let timeoutId;
       if (isColorChange) {
-        const [barOneIdx] = animations[i];
+        const [barOneIdx, bucket, numBucket] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         //const barTwoStyle = arrayBars[barTwoIdx].style;
         const color = (i + 1) % 2 === 0 ? PRIMARY_COLOR : SECONDARY_COLOR;
         timeoutId = setTimeout(() => {
           barOneStyle.backgroundColor = color;
           this.updateArray();
+          this.props.invokePropHandler([
+            0,
+            barOneIdx,
+            this.state.array[barOneIdx],
+            barOneStyle.backgroundColor,
+            bucket,
+            numBucket,
+          ]);
           this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
         }, timeDelay * ANIMATION_SPEED_MS);
       } else {
         //timeoutId = setTimeout(() => {
-        const [barOneIdx, newHeight] = animations[i];
+        const [barOneIdx, newHeight, numBucket, bucketNumber] = animations[i];
         const barOneStyle = arrayBars[barOneIdx].style;
         //const barTwoStyle = arrayBars[barTwoIdx].style;
         timeoutId = setTimeout(() => {
           barOneStyle.height = `${newHeight}px`;
           this.updateArray();
+          this.props.invokePropHandler([
+            1,
+            barOneIdx,
+            this.state.array[barOneIdx],
+            barOneStyle.backgroundColor,
+            numBucket,
+            bucketNumber,
+          ]);
           this.setState((state, props) => ({ lastPos: state.lastPos + 1 }));
           //barTwoStyle.height = `${newHeight2}px`;
         }, timeDelay * ANIMATION_SPEED_MS);
@@ -696,7 +979,7 @@ export default class VisualizerContainer extends React.Component {
     };
 
     return (
-      <div className="p-2 col-7">
+      <div id="VisualizerContainer" className="p-2 col-7">
         <div className="array-container">
           {array.map((value, idx) => (
             <div className="array-sub">
@@ -712,45 +995,37 @@ export default class VisualizerContainer extends React.Component {
             </div>
           ))}
         </div>
-        <div className="justify-content-center">
-          <button onClick={() => this.resetProblem()}>reset</button>
-          <button onClick={() => (!play ? this.run() : this.pause())}>
-            {!play ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="50"
-                height="50"
-                fill="currentColor"
-                className="bi bi-play-circle"
-                viewBox="0 0 16 16"
-              >
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445z" />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="50"
-                height="50"
-                fill="currentColor"
-                className="bi bi-pause-circle"
-                viewBox="0 0 16 16"
-              >
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-                <path d="M5 6.25a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5zm3.5 0a1.25 1.25 0 1 1 2.5 0v3.5a1.25 1.25 0 1 1-2.5 0v-3.5z" />
-              </svg>
-            )}
-          </button>
+        <div className="justify-content-center mb-2">
+          <Button
+            style={{ padding: "5px 25px" }}
+            onClick={() => this.resetProblem()}
+          >
+            reset
+          </Button>
+          <Button
+            style={{ padding: "5px 25px" }}
+            onClick={() => (!play ? this.run() : this.pause())}
+          >
+            {!play ? "Play" : "Pause"}
+          </Button>
           {/* <button onClick={() => this.pause(0)}>pause</button> */}
           {/* <button onClick={() => this.pause(2)}>back</button> */}
-          <button onClick={() => this.pause(1)}>forward</button>
+          <Button style={{ padding: "5px 25px" }} onClick={() => this.pause(1)}>
+            forward
+          </Button>
+          <label for="speedSelect">Speed</label>
           <input
+            style={{ margin: "0px 15px" }}
+            name="speedSelect"
             type="range"
             step="5"
             min="5"
             max="50"
             onInput={onInputhandler}
           ></input>
+          <span style={{ fontWeight: 700 }}>
+            Execution time: {this.state.execTime}{" "}
+          </span>
         </div>
       </div>
     );

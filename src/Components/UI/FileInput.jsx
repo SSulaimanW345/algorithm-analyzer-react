@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
+import styled from "styled-components";
 
 const FileInput = (props) => {
   var numberArray = [];
@@ -15,12 +16,17 @@ const FileInput = (props) => {
     };
   };
   return (
-    <div>
+    <div
+      style={{
+        margin: 0,
+        padding: 13,
+      }}
+    >
       <button className="btn btn-primary">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
+          width="30"
+          height="30"
           fill="currentColor"
           className="bi bi-folder"
           viewBox="0 0 16 16"
@@ -30,7 +36,12 @@ const FileInput = (props) => {
         </svg>
       </button>
 
-      <input type="file" name="file" onChange={handleFileInput} />
+      <input
+        style={{ marginLeft: 10 }}
+        type="file"
+        name="file"
+        onChange={handleFileInput}
+      />
     </div>
   );
 };

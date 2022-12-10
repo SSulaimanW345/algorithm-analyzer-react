@@ -1,6 +1,6 @@
 import { useState } from "react";
 import MenuItem from "./MenuItem";
-
+import "./Menu.css";
 const Menu = (props) => {
   const [algotype, setalgotype] = useState(props.items[0]);
   const onChangehandler = (event) => {

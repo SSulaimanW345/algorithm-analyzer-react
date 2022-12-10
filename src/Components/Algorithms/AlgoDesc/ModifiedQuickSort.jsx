@@ -1,11 +1,22 @@
 import "./allDesc.css";
-import bubbleTime from "../../../assests/BubbleSortTime.JPG";
-const BubbleSort = () => {
+
+const ModifiedQuickSort = () => {
   return (
     <div>
       <div className="d-flex">
         <div className="p-2 col-lg-7">
-          <h1>What is bubble Sort?</h1>
+          <h1>What is Modified QuickSort?</h1>
+          <p className="p-4">
+            Quicksort algorithm is efficient if the size of the input is very
+            large. But, insertion sort is more efficient than quick sort in case
+            of small arrays as the number of comparisons and swaps are less
+            compared to quicksort. So we combine the two algorithms to sort
+            efficiently using both approaches. The idea is to use recursion and
+            continuously find the size of the array. If the size is greater than
+            the threshold value(10), then the quicksort function is called for
+            that portion of the array. Else, insertion sort is called.
+          </p>
+          <h1>How to calculate time complexity?</h1>
           <p className="p-4">
             is a simple sorting algorithm that repeatedly steps through the
             list, compares adjacent elements and swaps them if they are in the
@@ -14,17 +25,6 @@ const BubbleSort = () => {
             way smaller or larger elements "bubble" to the top of the list.
             Although the algorithm is simple, it is too slow and impractical for
             most problems
-          </p>
-          <h1>How to calculate time complexity?</h1>
-          <p className="p-4">
-            <img className="col-12" src={bubbleTime} />
-            {/* is a simple sorting algorithm that repeatedly steps through the
-            list, compares adjacent elements and swaps them if they are in the
-            wrong order.The pass through the list is repeated until the list is
-            sorted. The algorithm, which is a comparison sort, is named for the
-            way smaller or larger elements "bubble" to the top of the list.
-            Although the algorithm is simple, it is too slow and impractical for
-            most problems */}
           </p>
         </div>
         <div className="p-2 col-lg-5">
@@ -59,4 +59,4 @@ const BubbleSort = () => {
   );
 };
 
-export default BubbleSort;
+export default ModifiedQuickSort;

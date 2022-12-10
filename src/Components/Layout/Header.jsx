@@ -2,6 +2,7 @@ import { useState, Fragment } from "react";
 import mainicon from "../../assests/mainicon.webp";
 import Menu from "../UI/Menu";
 import FileInput from "../UI/FileInput";
+import Button from "../UI/Button";
 const Header = (props) => {
   const algorithms = [
     { title: "MergeSort" },
@@ -13,6 +14,8 @@ const Header = (props) => {
     { title: "BucketSort" },
     { title: "RadixSort" },
     { title: "CountSort" },
+    { title: "ModifiedQuickSort" },
+    { title: "CountElements" },
   ];
   const onSelecthandler = (algotype) => {
     console.log(algotype);
@@ -27,7 +30,7 @@ const Header = (props) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <a className="navbar-brand" href="#">
-        <img src={mainicon} width="30" height="30" alt="" />
+        <img src={mainicon} width="50" height="50" alt="" />
       </a>
       <button
         className="navbar-toggler"
@@ -45,10 +48,9 @@ const Header = (props) => {
         <ul className="navbar-nav mr-auto">
           <FileInput sendNumberarray={sendNumberarrayhandler} />
           <Menu items={algorithms} onSelecthandler={onSelecthandler} />
+
+          <Button onClick={onClickHandler}>Generate new array</Button>
         </ul>
-      </div>
-      <div>
-        <button onClick={onClickHandler}>Generate new array</button>
       </div>
     </nav>
   );

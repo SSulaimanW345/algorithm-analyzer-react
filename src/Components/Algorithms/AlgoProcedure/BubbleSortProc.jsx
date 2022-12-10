@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import "./allProc.css";
 const PRIMARY_COLOR = "turquoise";
 // This is the color of array bars that are being compared throughout the animations.
 const SECONDARY_COLOR = "red";
@@ -9,6 +9,12 @@ const BubbleSortProc = (props) => {
 
   return (
     <div>
+      <div>
+        <p>for i in range(n-1):</p>
+        <p> for j in range(0, n-i-1):</p>
+        <p>if arr[j] is greater arr[j + 1]:</p>
+        <p>arr[j], arr[j + 1] = arr[j + 1],arr[j]</p>
+      </div>
       <div>
         {props.stepData == "" && <div>click play button to start</div>}
         {props.stepData != "" && props.stepData[4] == SECONDARY_COLOR && (
@@ -84,12 +90,6 @@ const BubbleSortProc = (props) => {
             <p>swap if required</p>
           </div>
         }} */}
-      </div>
-      <div>
-        <div>for i in range(n-1):</div>
-        <div> for j in range(0, n-i-1):</div>
-        <div>if arr[j] is greater arr[j + 1]:</div>
-        <div>arr[j], arr[j + 1] = arr[j + 1],arr[j]</div>
       </div>
     </div>
   );

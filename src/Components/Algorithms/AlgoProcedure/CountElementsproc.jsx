@@ -1,36 +1,22 @@
+import { useEffect, useState } from "react";
+import "./allProc.css";
+
 const PRIMARY_COLOR = "turquoise";
+// This is the color of array bars that are being compared throughout the animations.
 const SECONDARY_COLOR = "red";
-const RadixSortProc = (props) => {
+const CountElementsproc = (props) => {
   return (
     <div>
       <div>
-        <p>output = [0] * size; count = [0] * 10</p>
-        <p>for i in range(0, size): index = array[i] </p>
-        <p>count[index % 10] += 1</p>
-        <p>for i in range(1, 10):</p>
-        <p>count[i] += count[i - 1]</p>
-        <p>i = size - 1</p>
-        <p>while i is greater than 0:</p>
-        <p>index = array[i]</p>
-        <p>output[count[index % 10] - 1] = array[i]</p>
-        <p>count[index % 10] -= 1; i -= 1</p>
-        <p>for i in range(0, size):</p>
-        <p> array[i] = output[i]</p>
+        <p>count array of length n intialized</p>
+        <p>for i = 0 to n do: count[key of(A[i]) in pass j]++</p>
+        <p>for k = 1 to 10: count[k] = count[k] + count[k-1]</p>
+        <p>for i = n-1 downto 0 do</p>
+        <p>result[ count[key of(A[i])] ] = A[j]</p>
+        <p>count[key of(A[i])]--</p>
       </div>
       <div>
         {props.stepData == "" && <div>click play button to start</div>}
-        {props.stepData != "" && props.stepData[0] == 1 && (
-          <div>
-            Pass number: {props.stepData[5]} means consider digit at{" "}
-            {props.stepData[6]}th place
-          </div>
-        )}
-        {props.stepData != "" && props.stepData[0] == 0 && (
-          <div>
-            Pass number: {props.stepData[4]} means consider digit at{" "}
-            {props.stepData[5]}th place
-          </div>
-        )}
         {props.stepData != "" &&
           props.stepData[0] == 0 &&
           props.stepData[3] == SECONDARY_COLOR && (
@@ -58,9 +44,18 @@ const RadixSortProc = (props) => {
             </p>
           </div>
         )}
+        {props.stepData != "" && props.stepData[0] == 2 && (
+          <div>
+            <p>
+              Finding count of elements in range {props.stepData[2]} -{" "}
+              {props.stepData[3]}
+            </p>
+            <p>count: {props.stepData[1]}</p>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default RadixSortProc;
+export default CountElementsproc;

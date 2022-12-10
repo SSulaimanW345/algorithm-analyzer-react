@@ -1,20 +1,19 @@
 import "./allDesc.css";
 import CountTime from "../../../assests/CountSortTime.JPG";
-const CountSort = () => {
+
+const CountElements = () => {
   return (
     <div>
       <div className="d-flex">
         <div className="p-2 col-lg-7">
-          <h1>What is Count Sort?</h1>
+          <h1>How to count numbers in a given range in sorted array?</h1>
           <p className="p-4">
-            Counting sort is a sorting algorithm that sorts the elements of an
-            array by counting the number of occurrences of each unique element
-            in the array. The count is stored in an auxiliary array and the
-            sorting is done by mapping the count as an index of the auxiliary
-            array.
+            We have used CountSort to sort given array in linear time. An
+            additional for loop is added which iterates the array and increments
+            count if the number is between the specified range.
           </p>
-          <h1>How to calculate time complexity?</h1>
           <p className="p-4">
+            <h1>How in linear time?</h1>
             <img className="col-12" src={CountTime} />
           </p>
         </div>
@@ -36,4 +35,4 @@ const CountSort = () => {
   );
 };
 
-export default CountSort;
+export default CountElements;
