@@ -55,7 +55,7 @@ export default class VisualizerContainer extends React.Component {
     if (this.props.arr !== prevProps.arr) {
       this.setState({ array: this.props.arr });
       this.setState({ type: this.props.type });
-      this.resetArray();
+      //this.resetArray();
       this.clearTimeouts();
       this.setState((state, props) => ({ lastPos: -1 }));
     }
@@ -82,6 +82,10 @@ export default class VisualizerContainer extends React.Component {
     if (this.state.play != prevState.play) {
       this.setState({ play: this.state.play });
       console.log("executed animations ");
+    }
+    if (this.state.execTime != prevState.execTime) {
+      this.setState({ execTime: this.state.execTime });
+      console.log("executed execTime ");
     }
   }
 
@@ -112,6 +116,7 @@ export default class VisualizerContainer extends React.Component {
     this.setState({ play: !this.state.play });
     this.state.timeoutIds.forEach((timeoutId) => clearTimeout(timeoutId));
     this.setState({ timeoutIds: [] });
+    // this.setState({ lastPos: -1 });
   };
   pause = (opt) => {
     this.setState({ play: !this.state.play });
@@ -165,8 +170,12 @@ export default class VisualizerContainer extends React.Component {
 
   mergeSort(a) {
     let animations = [];
+    //const start = performance.now();
     if (this.state.animations.length == 0) {
+      const start = performance.now();
       animations = getMergeSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     if (animations.length != 0) this.setState({ animations });
     const timeoutIds = [];
@@ -220,6 +229,7 @@ export default class VisualizerContainer extends React.Component {
       timeDelay * ANIMATION_SPEED_MS
     );
     timeoutIds.push(timeoutId);
+
     //this.updateArray();
     this.setState({ timeoutIds });
     this.updateArray();
@@ -228,7 +238,10 @@ export default class VisualizerContainer extends React.Component {
   quickSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
       animations = getQuickSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     if (animations.length != 0) this.setState({ animations });
     const timeoutIds = [];
@@ -307,7 +320,10 @@ export default class VisualizerContainer extends React.Component {
   ModifiedquickSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
       animations = getOptimizedQuickSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     if (animations.length != 0) this.setState({ animations });
     const timeoutIds = [];
@@ -439,7 +455,10 @@ export default class VisualizerContainer extends React.Component {
   insertionSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
       animations = getInsertionSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     const arrlength = this.state.array.length;
     if (animations.length != 0) this.setState({ animations });
@@ -508,7 +527,10 @@ export default class VisualizerContainer extends React.Component {
   countSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
       animations = getCountingSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     const arrlength = this.state.array.length;
     if (animations.length != 0) this.setState({ animations });
@@ -577,11 +599,15 @@ export default class VisualizerContainer extends React.Component {
     let firstNum = 40;
     let secondNum = 100;
     if (this.state.animations.length == 0) {
+      const start = performance.now();
+
       animations = getCountElementsAnimations(
         this.state.array,
         firstNum,
         secondNum
       );
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     const arrlength = this.state.array.length;
     if (animations.length != 0) this.setState({ animations });
@@ -662,7 +688,10 @@ export default class VisualizerContainer extends React.Component {
   radixSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
       animations = getRadixSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     const arrlength = this.state.array.length;
     console.log("I am good");
@@ -748,7 +777,11 @@ export default class VisualizerContainer extends React.Component {
   heapSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
+
       animations = getHeapSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     if (animations.length != 0) this.setState({ animations });
     const timeoutIds = [];
@@ -811,7 +844,11 @@ export default class VisualizerContainer extends React.Component {
   bubbleSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
+
       animations = getBubbleSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     if (animations.length != 0) this.setState({ animations });
     const timeoutIds = [];
@@ -892,7 +929,10 @@ export default class VisualizerContainer extends React.Component {
   bucketSort(a) {
     let animations = [];
     if (this.state.animations.length == 0) {
+      const start = performance.now();
       animations = getBucketSortAnimations(this.state.array);
+      const end = performance.now();
+      this.setState({ execTime: (end - start).toFixed(4) });
     }
     const arrlength = this.state.array.length;
     if (animations.length != 0) this.setState({ animations });
@@ -1024,7 +1064,7 @@ export default class VisualizerContainer extends React.Component {
             onInput={onInputhandler}
           ></input>
           <span style={{ fontWeight: 700 }}>
-            Execution time: {this.state.execTime}{" "}
+            Execution time: {this.state.execTime} ms
           </span>
         </div>
       </div>

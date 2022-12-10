@@ -15,8 +15,7 @@ const QuickSortProc = (props) => {
         <p>for i = beg to end-1</p>
         <p>arr[i] less than pivot</p>
         <p>swap arr[i] and arr[pIndex];pIndex++</p>
-        <p>swap pivot and arr[pIndex+1]</p>
-        <p>return pIndex + 1</p>
+        <p>swap pivot and arr[pIndex+1];return pIndex + 1</p>
       </div>
       <div>
         {props.stepData == "" && <div>click play button to start</div>}

@@ -246,7 +246,8 @@ export function getBucketSortAnimations(array) {
   let i = 0;
   array.forEach(element => {
     Buckets[Math.floor((element - minVal) / bucketSize)].push(element);
-    animations.push([i,Math.floor((element - minVal) / bucketSize),bucketCount]);animations.push([i,Math.floor((element - minVal) / bucketSize),bucketCount]);
+    animations.push([i, Math.floor((element - minVal) / bucketSize), bucketCount]);
+    animations.push([i, Math.floor((element - minVal) / bucketSize), bucketCount]);
     i++;
   });
   i = 0;
